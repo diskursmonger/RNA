@@ -1,7 +1,6 @@
 #include "rna.hpp"
 #include <iostream>
 
-typedef unsigned char Nucleotide;
 const Nucleotide A = 0b00;
 const Nucleotide G = 0b01;
 const Nucleotide C = 0b10;
@@ -15,7 +14,7 @@ inline int ind_in_block(int i){
     return (i + 1) % 4;
 }
 
-Nucleotide do_Mask(Nucleotide Nucl, int ind_in_block){ 
+Nucleotide do_Mask(Nucleotide Nucl, int ind_in_block){
 //put a nucl in the right place
     switch (ind_in_block) {
         case 1:
@@ -350,7 +349,7 @@ RNA RNA::operator!(){
     rna1.length = length;
     rna1.length_arr = length_arr;
     for (int i = 1; i <= length; i++){
-        Nucleotide Nucl = compNucl((*this)[i]); 
+        Nucleotide Nucl = compNucl((*this)[i]);
         rna1.change(i, Nucl);
     }
     return rna1;
