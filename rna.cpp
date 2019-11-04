@@ -126,7 +126,7 @@ void RNA::eto_change(int index, Nucleotide Nucl){
     int ind_bloc = ind_block(index);
     int ind_in_bloc = ind_in_block(index);
     if (ind_in_bloc == 0) ind_in_bloc = 4;
-    for (int i = 0; i < 4; i++){ //i- номер в блоке
+    for (int i = 0; i < 4; i++){ //i- number in block
         int ind = (i + 1) + (ind_bloc * 4);
         Nucl_in_block[i] = (*this).get(ind);
     }
