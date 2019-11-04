@@ -1,3 +1,6 @@
+#include "rna.h"
+#include "rna.cpp"
+
 int main() {
     RNA r1(11,C);
     RNA r2(11,G);
