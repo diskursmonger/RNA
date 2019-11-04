@@ -1,10 +1,11 @@
-#ifdef rna_hpp
+#ifndef rna_hpp
 #define rna_hpp
 
 #include <iostream>
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
+typedef unsigned char Nucleotide;
 class reference;
 
 class RNA{
