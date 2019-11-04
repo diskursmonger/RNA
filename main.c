@@ -1,5 +1,6 @@
 #include "rna.hpp"
 #include "rna.cpp"
+#include <iostream>
 
 int main() {
     RNA r1(11,C);
