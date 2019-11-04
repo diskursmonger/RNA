@@ -1,4 +1,4 @@
-#include "rna.h"
+#include "rna.hpp"
 #include "rna.cpp"
 
 int main() {
