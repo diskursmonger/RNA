@@ -1,11 +1,17 @@
-#ifndef rna_hpp
-#define rna_hpp
+#ifndef rna_h
+#define rna_h
 
 #include <iostream>
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
 typedef unsigned char Nucleotide;
+
+const Nucleotide A = 0b00;
+const Nucleotide G = 0b01;
+const Nucleotide C = 0b10;
+const Nucleotide T = 0b11;
+
 class reference;
 
 class RNA{
@@ -19,11 +25,10 @@ public:
     RNA(const RNA&);
     void add(Nucleotide);
     Nucleotide get(int);
-    void change(int, Nucleotide);
-    void eto_change(int, Nucleotide);
+    void put(int, Nucleotide);
+    void put_ref(int, Nucleotide);
     RNA operator+(const RNA&);
     RNA& operator=(const RNA&);
-    Nucleotide operator=(const Nucleotide&);
     Nucleotide operator[](int) const;
     reference operator[](int);
     RNA& split(int);
@@ -46,4 +51,4 @@ public:
     operator Nucleotide();
 };
 
-#endif /* rna_hpp */
+#endif /* rna_h */
