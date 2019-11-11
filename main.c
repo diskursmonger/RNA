@@ -2,7 +2,6 @@
 #include <iostream>
 #include <gtest/gtest.h>
 #include <sys/times.h>
-#include <unistd.h>
 
 int main() {
     struct tms start, end;
