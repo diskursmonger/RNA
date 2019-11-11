@@ -3,7 +3,6 @@
 
 #include <iostream>
 #pragma once
-#define _CRT_SECURE_NO_WARNINGS
 
 typedef unsigned char Nucleotide;
 
@@ -17,7 +16,8 @@ class reference;
 class RNA{
     friend class reference;
     int length = 0;
-    int length_arr = 0;
+    int length_arr = 1;
+    //int max_nucl = 0;
     Nucleotide *rna = nullptr;
 public:
     RNA(int length, Nucleotide);
@@ -36,6 +36,7 @@ public:
     bool operator==(const RNA&);
     bool operator!=(const RNA&);
     RNA operator!();
+    void get_length();
     ~RNA(){
         delete []rna;
     }
