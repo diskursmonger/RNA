@@ -210,6 +210,15 @@ RNA& RNA::operator=(const RNA& rna1){
 RNA RNA::operator+(const RNA& rna1){
     RNA rna_temporary;
     rna_temporary = (*this);
+    //rna_temporary.length = length + rna1.length;
+    /*int max_length = rna_temporary.length_arr * 4;
+    if (rna_temporary.length >=max_length){
+        for (){
+        Nucleotide Nucl = rna1[k];
+        }
+    }
+*/
+    //
     if(rna1.length == 1){
         rna_temporary.add(rna1[1]);
     } else {
