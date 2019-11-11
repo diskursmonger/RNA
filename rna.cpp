@@ -29,26 +29,6 @@ Nucleotide do_Mask(Nucleotide Nucl, int ind_in_block){
     return Nucl;
 }
 
-reference::reference(RNA & rna1, int ind){
-    index = ind;
-    rna_ref = &rna1;
-}
-
-reference::operator Nucleotide(){
-    Nucleotide Nucl = (*rna_ref).get(index);
-    return Nucl;
-}
-
-reference RNA::operator[](int index) {
-    reference Nucl(*this, index);
-    return Nucl;
-}
-
-reference& reference::operator=(const Nucleotide Nucl){
-    (*rna_ref).put_ref(index, Nucl);
-    return *this;
-}
-
 Nucleotide convert(Nucleotide Nucl){
 //convert nucl in char (ex. 'A') format
     switch (Nucl) {
@@ -92,8 +72,33 @@ Nucleotide convert_vise(Nucleotide Nucl){
 
     return Nucl;
 }
+reference::reference(RNA & rna1, int ind){
+    index = ind;
+    rna_ref = &rna1;
+}
+
+reference::operator Nucleotide(){
+    //вытаскиваем нуклеотид который хранится в r1[index]
+    Nucleotide Nucl = (*rna_ref).get(index);
+    return Nucl;
+}
+
+reference RNA::operator[](int index) {
+    // r1[4]
+    reference Nucl_ref(*this, index);
+    //создаем объект reference r1[index]
+    return Nucl_ref;
+}
+
+reference& reference::operator=(const Nucleotide Nucl){
+    //r1[2] = T;
+    (*rna_ref).put_ref(index, Nucl);
+    return *this;
+}
 
 reference& reference::operator=(const reference& nucl_here){
+    //r1[2] = r2[4];
+    //r1.operator[]2.operator=(r2.operator[]4);
     Nucleotide Nucl = nucl_here.rna_ref->get(nucl_here.index);
     Nucl = convert_vise(Nucl);
     (*rna_ref).put_ref(index, Nucl);
@@ -181,12 +186,15 @@ RNA& RNA::operator=(const RNA& rna1){
     if (length != rna1.length){
         delete [] rna;
        // length_arr = rna1.length_arr; //max dlinu prisvaivau
-       //if (length / length_arr >= 2) length_arr = rna1.length_arr * 2; //new
-        if(rna1.length_arr * 4 > rna1.length ){
-            length_arr = rna1.length_arr * 2;
-        } else {
-            length_arr = rna1.length_arr;
-        }
+        //if ((rna1.length / rna1.length_arr >= 2)) {
+        //if (rna1.length / rna1.length_arr >= 3){
+        length_arr = rna1.length_arr;
+           // std::cout <<length_arr<<"1\n";
+        //}
+        //else {
+          //  length_arr = rna1.length_arr;
+            //std::cout << rna1.length <<"  "<< length_arr <<"  - length\n";
+        //}
         rna = new Nucleotide[length_arr];
     }
    // length_arr = rna1.length_arr;
@@ -201,29 +209,43 @@ RNA& RNA::operator=(const RNA& rna1){
 
 RNA RNA::operator+(const RNA& rna1){
     RNA rna_temporary;
-    //RNA rna_temporary = (*this);
     rna_temporary = (*this);
-    rna_temporary.length = length + rna1.length;
-   // rna_temporary.length_arr =
-
-    if (rna_temporary.length_arr * 4 < length_arr + rna1.length_arr){
-       //countcounte++;
-       // if (countcounte % 10 == 0) std::cout << countcounte << std::endl;
-        rna_temporary.length_arr = (length + rna1.length) * 2 + 1;
-       // std::cout << "rna_temporary is  "<< rna_temporary.length_arr << std::endl;
-        rna_temporary.rna = new Nucleotide[rna_temporary.length_arr];
-        for (int i = 1; i <= length; i++){
-            Nucleotide Nucl = (*this)[i];
+    if(rna1.length == 1){
+        rna_temporary.add(rna1[1]);
+    } else {
+        //RNA rna_temporary = (*this);
+        rna_temporary.length = length + rna1.length;
+        if (rna_temporary.length >= rna_temporary.length_arr * 4) {
+            rna_temporary.length_arr = rna_temporary.length;
+            // countcounte++;
+            // std::cout << countcounte << std::endl;
+            // std::cout << "rna_temporary is  "<< rna_temporary.length_arr << std::endl;
+            rna_temporary.rna = new Nucleotide[rna_temporary.length_arr];
+            for (int i = 1; i <= length; i++) {
+                Nucleotide Nucl = (*this)[i];
+                Nucl = convert_vise(Nucl);
+                rna_temporary.put(i, Nucl);
+            }
+        }
+        /*if (rna_temporary.length_arr * 4 < length_arr + rna1.length_arr){
+           //countcounte++;
+           // if (countcounte % 10 == 0) std::cout << countcounte << std::endl;
+            rna_temporary.length_arr = (length + rna1.length) * 2 + 1;
+           // std::cout << "rna_temporary is  "<< rna_temporary.length_arr << std::endl;
+            rna_temporary.rna = new Nucleotide[rna_temporary.length_arr];
+            for (int i = 1; i <= length; i++){
+                Nucleotide Nucl = (*this)[i];
+                Nucl = convert_vise(Nucl);
+                rna_temporary.put(i, Nucl);
+            }
+        } */
+        int k = 1;
+        for (int i = length + 1; i <= rna_temporary.length; i++) {
+            Nucleotide Nucl = rna1[k];
             Nucl = convert_vise(Nucl);
             rna_temporary.put(i, Nucl);
+            k++;
         }
-    }
-    int k = 1;
-    for (int i = length + 1; i <= rna_temporary.length; i++){
-        Nucleotide Nucl = rna1[k];
-        Nucl = convert_vise(Nucl);
-        rna_temporary.put(i, Nucl);
-        k++;
     }
     return rna_temporary;
 }
@@ -242,9 +264,6 @@ RNA& RNA::split(int index){
     }
     this->length = rna_temporary.length - index;
     return *this;
-}
-
-RNA::RNA(){
 }
 
 Nucleotide RNA::get(int index){
@@ -300,8 +319,26 @@ bool check(Nucleotide nucl1, Nucleotide nucl2){
 }
 
 void RNA::add(Nucleotide Nucl){
-    RNA rna1(1, Nucl);
-    (*this) = (*this) + rna1;
+    //RNA rna1(1, Nucl);
+    //(*this) = (*this) + rna1;
+    //if (max_nucl)
+    length++;
+    int max_nucl = length_arr * 4;
+    if (length == max_nucl){
+        RNA rna_temporary;
+        rna_temporary = (*this);
+        length_arr *= 2;
+        delete[] rna;
+        rna = new Nucleotide[length_arr];
+        for (int i = 1; i < length; i++){
+            Nucleotide n = rna_temporary[i];
+            n = convert_vise(n);
+            (*this).put(i, n);
+        }
+        //std::cout << length << std::endl;
+    }
+    Nucl = convert_vise(Nucl);
+    (*this).put(length, Nucl);
 }
 
 bool RNA::isComplimentary(const RNA& rna1){
@@ -394,4 +431,12 @@ RNA::RNA(int length, Nucleotide Nucl){
     this->length = length;
     this->length_arr = length / 4 + 1;
   //  if (length % 4 != 0) this->length_arr++;
+}
+
+RNA::RNA(){
+    rna = new Nucleotide[1];
+}
+
+void RNA::get_length() {
+    std::cout << length << std::endl;
 }
