@@ -16,8 +16,7 @@ class reference;
 class RNA{
     friend class reference;
     int length = 0;
-    int length_arr = 1;
-    //int max_nucl = 0;
+    int blocks = 1;
     Nucleotide *rna = nullptr;
 public:
     RNA(int length, Nucleotide);
