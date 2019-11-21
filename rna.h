@@ -1,7 +1,6 @@
 #ifndef rna_h
 #define rna_h
-
-#include <iostream>
+//#include <iostream>
 #pragma once
 
 typedef unsigned char Nucleotide;
@@ -13,22 +12,22 @@ const Nucleotide T = 0b11;
 
 class reference;
 
-class RNA{
+class RNA {
     friend class reference;
     int length = 0;
     int blocks = 1;
-    Nucleotide *rna = nullptr;
+    Nucleotide* rna = nullptr;
 public:
     RNA(int length, Nucleotide);
     RNA();
     RNA(const RNA&);
-    void add(Nucleotide);
-    Nucleotide get(int);
-    void put(int, Nucleotide);
-    void put_ref(int, Nucleotide);
+    RNA& add(Nucleotide);
+    unsigned char get(int) const;
+    RNA& put(int, Nucleotide);
+    RNA& put_ref(int, Nucleotide);
     RNA operator+(const RNA&);
     RNA& operator=(const RNA&);
-    Nucleotide operator[](int) const;
+    unsigned char operator[](int) const;
     reference operator[](int);
     RNA& split(int);
     bool isComplimentary(const RNA&);
@@ -36,19 +35,20 @@ public:
     bool operator!=(const RNA&);
     RNA operator!();
     void get_length();
-    ~RNA(){
-        delete []rna;
+    ~RNA() {
+        delete[]rna;
     }
 };
 
-class reference{
+class reference {
     int index = 0;
-    RNA *rna_ref;
+    RNA* rna_ref;
 public:
-    reference(RNA&, int index);
+    reference(RNA&, int);
+    ~reference() {};
     reference& operator=(const reference&);
     reference& operator=(const Nucleotide);
-    operator Nucleotide();
+    operator unsigned char();
 };
 
-#endif /* rna_h */
+#endif
