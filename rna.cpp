@@ -201,7 +201,7 @@ RNA& RNA::operator=(const RNA& rna1) {
     return *this;
 }
 
-RNA RNA::operator+(const RNA& rna1) {
+/*RNA RNA::operator+(const RNA& rna1) {
     RNA rna_temporary = (*this);
     if (rna1.length == 1) {
         rna_temporary.add(rna1[1]);
@@ -228,6 +228,41 @@ RNA RNA::operator+(const RNA& rna1) {
         }
     }
     return rna_temporary;
+}*/
+
+RNA RNA::operator+(const RNA& rna1) {
+	int max_nucl = blocks * 4;
+	if (length + rna1.length >= max_nucl) {
+		RNA rna_temporary;
+		rna_temporary.length = length + rna1.length;
+		rna_temporary.blocks = rna_temporary.length / 2;
+		delete[] rna_temporary.rna;
+		rna_temporary.rna = new Nucleotide[rna_temporary.blocks];
+		for (int i = 1; i <= length; i++) {
+			Nucleotide Nucl = (*this)[i];
+			Nucl = convert_vise(Nucl);
+			rna_temporary.put(i, Nucl);
+		}
+		int k = 1;
+		for (int i = length + 1; i <= rna_temporary.length; i++) {
+			Nucleotide Nucl = rna1[k];
+			Nucl = convert_vise(Nucl);
+			rna_temporary.put(i, Nucl);
+			k++;
+		}
+		//Sleep(10000);
+		return rna_temporary;
+	}	else {
+		int k = 1;
+		for (int i = length + 1; i <= length + rna1.length; i++) {
+			Nucleotide Nucl = rna1[k];
+			Nucl = convert_vise(Nucl);
+			(*this).put(i, Nucl);
+			k++;
+		}
+		this->length = length + rna1.length;
+		return *this;
+	}
 }
 
 RNA& RNA::split(int index) {
